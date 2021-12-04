@@ -25,7 +25,7 @@ void Logger::showColor(bool show) {
 	logColors = show;
 }
 
-void Logger::printColored(char* str, size_t length, const uint8_t level) {
+void Logger::printColored(const char* str, size_t length, const uint8_t level) {
 	
 	const auto printColor = [](char colorChar) constexpr {
 		int index = -1;
@@ -36,14 +36,15 @@ void Logger::printColored(char* str, size_t length, const uint8_t level) {
 			}
 		}
 		if (index >= 0) {
-			char color[] = { 27, 91, 51, (char)(48 + index), 59, 49, 109, 0 };
+			char color[] = { 27, 91, 51, (char)(48 + index), 59, 49, 109 };
+			size_t colorLen = sizeof(color);
 			if (index < sizeof(tokens) / 2) {
 				color[4] = 109;
-				color[5] = 0;
+				colorLen -= 2;
 			} else {
 				color[3] -= sizeof(tokens) / 2;
 			}
-			fputs(color, stdout);
+			fwrite(color , sizeof(char), colorLen, stdout);
 		}
 	};
 
@@ -53,19 +54,18 @@ void Logger::printColored(char* str, size_t length, const uint8_t level) {
 
 	if (firstToken == length) {
 		printColor(defaultColors[level]);
-		fputs(str, stdout);
+		fwrite(str, sizeof(char), length, stdout);
 	} else {
 		for (size_t i = firstToken; i < length; i++) {
 			if (str[i] == prefix && i + 1 < length) {
-				str[i++] = '\0';
-				fputs(&str[lastIndex], stdout);
+				fwrite(&str[lastIndex] , sizeof(char), i++ - lastIndex, stdout);
 				printColor(str[i]);
 				lastIndex = i + 1;
 			}
 		}
-		fputs(&str[lastIndex], stdout);
+		fwrite(&str[lastIndex] , sizeof(char), length - lastIndex, stdout);
 	}
-	fputs("\x001B[0m", stdout);
+	fwrite("\x001B[0m" , sizeof(char), 5, stdout);
 }
 
 void Logger::debug(const char* fmt, ...) {
@@ -77,16 +77,14 @@ void Logger::debug(const char* fmt, ...) {
 		size_t strLen = std::vsnprintf(NULL, 0, fmt, copyArg);
 		va_end(copyArg);
 
-		char* str = new char[strLen + 1];
-		str[strLen] = '\0';
-
-		std::vsnprintf(str, strLen + 1, fmt, args);
+		char* str = new char[strLen];
+		std::vsnprintf(str, strLen, fmt, args);
 		va_end(args);
 		
 		if (logType)
 			fputs("[debug] " , stdout);
 
-		printColored(str, strLen , 3);
+		printColored(str, strLen, 3);
 	
 		delete[] str;
 	}
@@ -102,15 +100,13 @@ void Logger::log(const char* fmt, ...) {
 		va_end(copyArg);
 
 		char* str = new char[strLen + 1];
-		str[strLen] = '\0';
-
 		std::vsnprintf(str, strLen + 1, fmt, args);
 		va_end(args);
 		
 		if (logType)
 			fputs("[log] " , stdout);
 
-		printColored(str, strLen , 2);
+		printColored(str, strLen, 2);
 	
 		delete[] str;
 	}
@@ -125,16 +121,14 @@ void Logger::warn(const char* fmt, ...) {
 		size_t strLen = std::vsnprintf(NULL, 0, fmt, copyArg);
 		va_end(copyArg);
 
-		char* str = new char[strLen + 1];
-		str[strLen] = '\0';
-
-		std::vsnprintf(str, strLen + 1, fmt, args);
+		char* str = new char[strLen];
+		std::vsnprintf(str, strLen, fmt, args);
 		va_end(args);
 		
 		if (logType)
 			fputs("[warn] " , stdout);
 
-		printColored(str, strLen , 1);
+		printColored(str, strLen, 1);
 	
 		delete[] str;
 	}

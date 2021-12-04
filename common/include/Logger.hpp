@@ -13,7 +13,7 @@ private:
 	static constexpr char tokens[] = "krgybpcwKRGYBPCW";
 	static constexpr char defaultColors[] = "RYwK";
 
-	static void printColored(char* str, size_t length, const uint8_t level);
+	static void printColored(const char* str, size_t length, const uint8_t level);
 
 public:
 	static void setLogLevel(const int logLevel);
@@ -33,10 +33,8 @@ public:
 			size_t strLen = std::vsnprintf(NULL, 0, fmt, copyArg);
 			va_end(copyArg);
 
-			char* str = new char[strLen + 1];
-			str[strLen] = '\0';
-
-			std::vsnprintf(str, strLen + 1, fmt, args);
+			char* str = new char[strLen];
+			std::vsnprintf(str, strLen, fmt, args);
 			va_end(args);
 
 			if (logType)
