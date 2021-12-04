@@ -47,6 +47,20 @@ std::vector<std::string> util::loadStrings(const std::string& filename) {
 	return lines;
 }
 
+std::vector<std::string> util::split(const std::string& str, const std::string& pattern) {
+	std::vector<std::string> parts;
+	size_t prevIndex = 0;
+	for (size_t i = 0; (i = str.find(pattern, i)) != std::string::npos; i++) {
+		parts.emplace_back(&str[prevIndex], &str[i]);
+		prevIndex = i + 1;
+	}
+	if (prevIndex < str.length()) {
+		parts.emplace_back(&str[prevIndex], &str[str.length()]);
+	}
+	return parts;
+}
+
+
 void util::test(const std::vector<challengeFunction>& challenges, const std::vector<int64_t>& testSolutions) {
 	Logger::showType(false);
 
