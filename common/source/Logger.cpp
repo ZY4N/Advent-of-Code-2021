@@ -27,14 +27,17 @@ void Logger::showColor(bool show) {
 
 void Logger::printColored(const char* str, size_t length, const uint8_t level) {
 	
-	const auto printColor = [](char colorChar) constexpr {
-		int index = -1;
+	int(*getColorIndex)(char) = [](char colorChar) constexpr -> int {
 		for (int i = 0; i < sizeof(tokens) - 1; i++) {
 			if (tokens[i] == colorChar) {
-				index = i;
-				break;
+				return i;
 			}
 		}
+		return -1;
+	}; 
+
+	const auto printColor = [&getColorIndex](char colorChar) constexpr {
+		int index = getColorIndex(colorChar);
 		if (index >= 0) {
 			char color[] = { 27, 91, 51, (char)(48 + index), 59, 49, 109 };
 			size_t colorLen = sizeof(color);
@@ -52,7 +55,7 @@ void Logger::printColored(const char* str, size_t length, const uint8_t level) {
 	while(firstToken < length && str[firstToken] != prefix)
 		firstToken++;
 
-	if (firstToken == length) {
+	if (firstToken == length || getColorIndex(str[firstToken + 1]) == -1) {
 		printColor(defaultColors[level]);
 		fwrite(str, sizeof(char), length, stdout);
 	} else {
@@ -66,6 +69,7 @@ void Logger::printColored(const char* str, size_t length, const uint8_t level) {
 		fwrite(&str[lastIndex] , sizeof(char), length - lastIndex, stdout);
 	}
 	fwrite("\x001B[0m" , sizeof(char), 5, stdout);
+	fflush(stdout);
 }
 
 void Logger::debug(const char* fmt, ...) {

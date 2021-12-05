@@ -52,7 +52,7 @@ std::vector<std::string> util::split(const std::string& str, const std::string& 
 	size_t prevIndex = 0;
 	for (size_t i = 0; (i = str.find(pattern, i)) != std::string::npos; i++) {
 		parts.emplace_back(&str[prevIndex], &str[i]);
-		prevIndex = i + 1;
+		prevIndex = i + pattern.length();
 	}
 	if (prevIndex < str.length()) {
 		parts.emplace_back(&str[prevIndex], &str[str.length()]);
@@ -62,14 +62,13 @@ std::vector<std::string> util::split(const std::string& str, const std::string& 
 
 
 void util::test(const std::vector<challengeFunction>& challenges, const std::vector<int64_t>& testSolutions) {
-	Logger::showType(false);
+	//Logger::showType(false);
 
 	const std::vector<std::string> test = loadStrings("testInput.txt");
 	const std::vector<std::string> input = loadStrings("input.txt");
 
 	for (size_t i = 0; i < challenges.size(); i++) {
 		Logger::log("|Y--------------------\n");
-
 		int64_t testOutput = challenges[i](test);
 		if (testSolutions.size() > i) {
 			Logger::log("test %s\n", (testOutput == testSolutions[i] ? "|Gpassed" : "|Rfailed"));
