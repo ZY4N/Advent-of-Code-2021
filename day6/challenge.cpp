@@ -37,52 +37,30 @@ int64_t fistChallenge(const std::vector<std::string>& lines) {
 	return totalFish;
 }
 
-//again not very elegant bot enough to get this done
-void popCnt(int initialOffset, int numDays, uint64_t* allOffset, uint64_t scale) {
-	std::vector<int8_t> fish;
-	fish.push_back(initialOffset);
-	for (int i = 0; i < numDays; i++) {
-		size_t numFish = fish.size();
-		for (size_t j = 0; j < numFish; j++) {
-			if(--fish[j] < 0) {
-				fish[j] = 6;
-				fish.push_back(8);
-			} 
-		}
-	}
-	for (int8_t offset : fish) {
-		allOffset[offset] += scale;
-	}
-}
-
 int64_t secondChallenge(const std::vector<std::string>& lines) {
 
-	const int maxOffset = 9;
-	const int batchSize = 64;
-	const int iterations = 4;
+	const size_t maxOffset = 8;
 
-	uint64_t numFishOffsets[9];
-	std::memset(numFishOffsets, 0, sizeof(numFishOffsets));
+	uint64_t fishOffsets[maxOffset + 1];
+	std::memset(fishOffsets, 0, sizeof(fishOffsets));
 
 	const auto& line = lines[0];
 	for (size_t i = 0; i < line.length(); i += 2) {
-		numFishOffsets[line[i] - '0']++;
+		fishOffsets[line[i] - '0']++;
 	}
 
-	for (int i = 0; i < iterations; i++) {
-		uint64_t nextOffsets[maxOffset];
-		std::memset(nextOffsets, 0, sizeof(nextOffsets));
-		for (int j = 0; j < maxOffset; j++) {
-			if (numFishOffsets[j] > 0) {
-				popCnt(j, batchSize, nextOffsets, numFishOffsets[j]);
-			}
+	for (size_t i = 0; i < 256; i++) {
+		uint64_t numDuplicatingFish = fishOffsets[0];
+		for (size_t j = 1; j <= maxOffset; j++) { //sub 1
+			fishOffsets[j - 1] = fishOffsets[j];
 		}
-		std::memcpy(numFishOffsets, nextOffsets,  sizeof(nextOffsets));
+		fishOffsets[maxOffset] = numDuplicatingFish; //add new fish
+		fishOffsets[6] += numDuplicatingFish; //reset old fish
 	}
 
 	uint64_t sum = 0;
-	for (size_t i = 0; i < maxOffset; i++) {
-		sum += numFishOffsets[i];
+	for (size_t i = 0; i <= maxOffset; i++) {
+		sum += fishOffsets[i];
 	}
 
 	return sum;
