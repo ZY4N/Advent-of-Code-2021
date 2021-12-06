@@ -39,9 +39,11 @@ int64_t fistChallenge(const std::vector<std::string>& lines) {
 
 int64_t secondChallenge(const std::vector<std::string>& lines) {
 
-	const size_t maxOffset = 8;
+	const size_t daysTillDuplication = 7;
+	const size_t daysTillGrownUp = 2;
 
-	uint64_t fishOffsets[maxOffset + 1];
+	size_t numOffsets = daysTillDuplication + daysTillGrownUp;
+	uint64_t fishOffsets[numOffsets];
 	std::memset(fishOffsets, 0, sizeof(fishOffsets));
 
 	const auto& line = lines[0];
@@ -51,15 +53,15 @@ int64_t secondChallenge(const std::vector<std::string>& lines) {
 
 	for (size_t i = 0; i < 256; i++) {
 		uint64_t numDuplicatingFish = fishOffsets[0];
-		for (size_t j = 1; j <= maxOffset; j++) { //sub 1
+		for (size_t j = 1; j < numOffsets; j++) { //sub 1
 			fishOffsets[j - 1] = fishOffsets[j];
 		}
-		fishOffsets[maxOffset] = numDuplicatingFish; //add new fish
-		fishOffsets[6] += numDuplicatingFish; //reset old fish
+		fishOffsets[numOffsets - 1] = numDuplicatingFish; //add new fish
+		fishOffsets[daysTillDuplication - 1] += numDuplicatingFish; //reset old fish
 	}
 
 	uint64_t sum = 0;
-	for (size_t i = 0; i <= maxOffset; i++) {
+	for (size_t i = 0; i < numOffsets; i++) {
 		sum += fishOffsets[i];
 	}
 
