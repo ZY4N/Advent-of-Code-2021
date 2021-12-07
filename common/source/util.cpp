@@ -71,7 +71,7 @@ void util::test(const std::vector<challengeFunction>& challenges, const std::vec
 		Logger::log("|Y--------------------\n");
 		int64_t testOutput = challenges[i](test);
 		if (testSolutions.size() > i) {
-			Logger::log("test %s\n", (testOutput == testSolutions[i] ? "|Gpassed" : "|Rfailed"));
+			Logger::log("test %s (%d)\n", (testOutput == testSolutions[i] ? "|Gpassed" : "|Rfailed"), testOutput);
 		} else {
 			Logger::log("test-output: %lld\n", testOutput);
 		}
