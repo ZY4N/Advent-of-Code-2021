@@ -8,7 +8,7 @@ std::string extractBetween(
 	const std::string& endPhrase,
 	const std::string& text
 ) {
-	size_t start = text.find(startPhrase, 0) + startPhrase.length() + 1;
+	size_t start = text.find(startPhrase, 0) + startPhrase.length();
 	size_t end = text.find(endPhrase, start);
 
 	if (start == std::string::npos || end == std::string::npos) {

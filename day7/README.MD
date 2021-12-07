@@ -1,4 +1,4 @@
-<h2>--- Day 7: The Treachery of Whales ---</h2><p>A giant <a href="https://en.wikipedia.org/wiki/Sperm_whale" target="_blank">whale</a> has decided your submarine is its next meal, and it's much faster than you are. There's nowhere to run!</p>
+h2>--- Day 7: The Treachery of Whales ---</h2><p>A giant <a href="https://en.wikipedia.org/wiki/Sperm_whale" target="_blank">whale</a> has decided your submarine is its next meal, and it's much faster than you are. There's nowhere to run!</p>
 <p>Suddenly, a swarm of crabs (each in its own tiny submarine - it's too deep for them otherwise) zooms in to rescue you! They seem to be preparing to blast a hole in the ocean floor; sensors indicate a <em>massive underground cave system</em> just beyond where they're aiming!</p>
 <p>The crab submarines all need to be aligned before they'll have enough power to blast a large enough hole for your submarine to get through. However, it doesn't look like they'll be aligned before the whale catches you! Maybe you can help?</p>
 <p>There's one major catch - crab submarines can only move horizontally.</p>
