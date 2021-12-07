@@ -1,4 +1,4 @@
-><h2>--- Day 7: The Treachery of Whales ---</h2><p>A giant <a href="https://en.wikipedia.org/wiki/Sperm_whale" target="_blank">whale</a> has decided your submarine is its next meal, and it's much faster than you are. There's nowhere to run!</p>
+<h2>--- Day 7: The Treachery of Whales ---</h2><p>A giant <a href="https://en.wikipedia.org/wiki/Sperm_whale" target="_blank">whale</a> has decided your submarine is its next meal, and it's much faster than you are. There's nowhere to run!</p>
 <p>Suddenly, a swarm of crabs (each in its own tiny submarine - it's too deep for them otherwise) zooms in to rescue you! They seem to be preparing to blast a hole in the ocean floor; sensors indicate a <em>massive underground cave system</em> just beyond where they're aiming!</p>
 <p>The crab submarines all need to be aligned before they'll have enough power to blast a large enough hole for your submarine to get through. However, it doesn't look like they'll be aligned before the whale catches you! Maybe you can help?</p>
 <p>There's one major catch - crab submarines can only move horizontally.</p>
@@ -41,15 +41,3 @@
 <p>Determine the horizontal position that the crabs can align to using the least fuel possible so they can make you an escape route! <em>How much fuel must they spend to align to that position?</em></p>
 </article>
 <p>Your puzzle answer was <code>94017638</code>.</p><p class="day-success">Both parts of this puzzle are complete! They provide two gold stars: **</p>
-<p>At this point, you should <a href="/2021">return to your Advent calendar</a> and try another puzzle.</p>
-<p>If you still want to see it, you can <a href="7/input" target="_blank">get your puzzle input</a>.</p>
-<p>You can also <span class="share">[Share<span class="share-content">on
-  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+%22The+Treachery+of+Whales%22+%2D+Day+7+%2D+Advent+of+Code+2021&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2021%2Fday%2F7&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
-  <a href="javascript:void(0);" onclick="var mastodon_instance=prompt('Mastodon Instance / Server Name?'); if(typeof mastodon_instance==='string' && mastodon_instance.length){this.href='https://'+mastodon_instance+'/share?text=I%27ve+completed+%22The+Treachery+of+Whales%22+%2D+Day+7+%2D+Advent+of+Code+2021+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2021%2Fday%2F7'}else{return false;}" target="_blank">Mastodon</a
-></span>]</span> this puzzle.</p>
-</main>
-
-<!-- ga -->
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();

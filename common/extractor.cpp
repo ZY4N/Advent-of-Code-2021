@@ -8,14 +8,14 @@ std::string extractBetween(
 	const std::string& endPhrase,
 	const std::string& text
 ) {
-	size_t start = text.find(startPhrase, 0) + startPhrase.length();
+	size_t start = text.find(startPhrase, 0) + startPhrase.length() + 1;
 	size_t end = text.find(endPhrase, start);
 
 	if (start == std::string::npos || end == std::string::npos) {
 		throw std::runtime_error("Cannot find start or endphrase");
 	}
 
-	return text.substr(start, end);
+	return text.substr(start, end - start);
 }
 
 int main(int numArgs, char* argc[]) {
@@ -29,7 +29,7 @@ int main(int numArgs, char* argc[]) {
 	Logger::debug("start:  |p\"%s\"\n", argc[3]);
 	Logger::debug("end:    |p\"%s\"\n", argc[4]);
 
-	const std::string output = extractBetween(argc[3], argc[3], util::loadString(argc[1]));
+	const std::string output = extractBetween(argc[3], argc[4], util::loadString(argc[1]));
 
 	std::ofstream outputFile;
 	outputFile.open(argc[2]);
@@ -44,7 +44,3 @@ int main(int numArgs, char* argc[]) {
 
 	Logger::log("|Gfinished!\n");
 }
-
-/*
-"article class=\"day-desc\"", "**</p>"
-*/

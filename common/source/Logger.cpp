@@ -81,8 +81,8 @@ void Logger::debug(const char* fmt, ...) {
 		size_t strLen = std::vsnprintf(NULL, 0, fmt, copyArg);
 		va_end(copyArg);
 
-		char* str = new char[strLen];
-		std::vsnprintf(str, strLen, fmt, args);
+		char* str = new char[strLen + 1];
+		std::vsnprintf(str, strLen + 1, fmt, args);
 		va_end(args);
 		
 		if (logType)
@@ -125,8 +125,8 @@ void Logger::warn(const char* fmt, ...) {
 		size_t strLen = std::vsnprintf(NULL, 0, fmt, copyArg);
 		va_end(copyArg);
 
-		char* str = new char[strLen];
-		std::vsnprintf(str, strLen, fmt, args);
+		char* str = new char[strLen + 1];
+		std::vsnprintf(str, strLen + 1, fmt, args);
 		va_end(args);
 		
 		if (logType)
