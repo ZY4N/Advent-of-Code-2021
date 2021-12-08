@@ -1,46 +1,48 @@
 #pragma once
-#include <string>
 #include <bitset>
-#include <stdarg.h>
+
+enum class logType : uint8_t {
+	MUTE = 0,
+	ERROR = 1,
+	WARN = 2,
+	LOG = 3,
+	INFO = 4,
+	DEBUG = 5
+};
 
 class Logger {
 private:
-	static uint8_t logLevel;
+	using enum logType;
+
+	static FILE* os; 
+	static logType logLevel;
 	static char prefix;
 	static bool newline;
-	static uint8_t lastLogType;
 	
-	static constexpr char tokens[] = "krgybpcwKRGYBPCW";
-	static constexpr char defaultColors[] = "RYwK";
+	static const constexpr char tokens[] = "krgybpcwKRGYBPCW";
+	static const constexpr char logTypeColors[] = "kRYwyK";
+	static const constexpr char* logTypeNames[] = {
+		"mute", "error", "warn", "log", "info", "debug"
+	};
 
-	static void printColored(const char* str, size_t length, const uint8_t level);
+	static char* logTypePrefix[]; 
 
+	static char* createTypePrefix(logType type);
+	static int getColorIndex(char colorChar);
+	static void printColor(char colorChar);
+	static void printColored(const char* str, size_t length, const logType type);
+	
 public:
-	static void setLogLevel(const int logLevel);
+	static void setLogLevel(logType type);
 	static void setPrefix(const char prefix);
+	static void setStream(FILE* newStream);
 
-	static void debug(const char* fmt, ...);
-	static void log(const char* fmt, ...);
-	static void warn(const char* fmt, ...);
-	static void error(const char funcName[], int line, const char* fmt, ...) {
-		if (logLevel >= 1) {
-			va_list args, copyArg;
+	static void print(const char* str, logType type, const char* fmt, ...);
 
-			va_start(args, fmt);
-			va_copy(copyArg, args);
-			size_t strLen = std::vsnprintf(NULL, 0, fmt, copyArg);
-			va_end(copyArg);
+	#define error(...)	print(__FUNCTION__, logType::ERROR, __VA_ARGS__)
+	#define warn(...) print(__FUNCTION__, logType::WARN, __VA_ARGS__)
+	#define log(...) print(__FUNCTION__, logType::LOG, __VA_ARGS__)
+	#define debug(...) print(__FUNCTION__, logType::DEBUG, __VA_ARGS__)
+	#define info(...) print(__FUNCTION__, logType::INFO, __VA_ARGS__)
 
-			char* str = new char[strLen];
-			std::vsnprintf(str, strLen, fmt, args);
-			va_end(args);
-
-			printf("[error][%s][%d]", funcName, line);
-
-			printColored(str, strLen , 0);
-		
-			delete[] str;
-		}
-	}
-	#define error(input) error(__FUNCTION__, __LINE__, input);
 };

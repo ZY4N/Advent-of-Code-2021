@@ -1,17 +1,8 @@
 #include <util.hpp>
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-
 #include <string>
-#include <stdexcept>
 #include <cstring>
 #include <vector>
-#include <fstream>
-#include <iostream>
 #include <chrono>
 #include <Logger.hpp>
 
@@ -82,5 +73,5 @@ void util::test(const std::vector<challengeFunction>& challenges, const std::vec
 		Logger::log("real-output: |P%lld\n", output);
 		Logger::log("Time: |B%lldns\n", (end - start).count());
 	}
-	Logger::error("|Y--------------------\n");
+	Logger::log("|Y--------------------\n");
 }
