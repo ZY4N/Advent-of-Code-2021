@@ -40,7 +40,7 @@ int64_t fistChallenge(const std::vector<std::string>& lines) {
 	return num1478;
 }
 
-
+//runs in 127341ns
 int64_t secondChallenge(const std::vector<std::string>& lines) {
 	uint64_t sum = 0; 
 	parseBits(lines, [&sum](displayArray& displays) {
