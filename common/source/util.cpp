@@ -62,7 +62,6 @@ std::vector<std::string> util::split(const std::string& str, const std::string& 
 
 
 void util::test(const std::vector<challengeFunction>& challenges, const std::vector<int64_t>& testSolutions) {
-	Logger::showType(false);
 	
 	const std::vector<std::string> test = loadStrings("testInput.txt");
 	const std::vector<std::string> input = loadStrings("input.txt");

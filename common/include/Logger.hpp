@@ -6,9 +6,9 @@
 class Logger {
 private:
 	static uint8_t logLevel;
-	static bool logType;
-	static bool logColors;
 	static char prefix;
+	static bool newline;
+	static uint8_t lastLogType;
 	
 	static constexpr char tokens[] = "krgybpcwKRGYBPCW";
 	static constexpr char defaultColors[] = "RYwK";
@@ -18,8 +18,6 @@ private:
 public:
 	static void setLogLevel(const int logLevel);
 	static void setPrefix(const char prefix);
-	static void showType(bool show);
-	static void showColor(bool show);
 
 	static void debug(const char* fmt, ...);
 	static void log(const char* fmt, ...);
@@ -37,8 +35,7 @@ public:
 			std::vsnprintf(str, strLen, fmt, args);
 			va_end(args);
 
-			if (logType)
-				printf("[error][%s][%d]", funcName, line);
+			printf("[error][%s][%d]", funcName, line);
 
 			printColored(str, strLen , 0);
 		

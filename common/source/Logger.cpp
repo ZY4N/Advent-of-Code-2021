@@ -5,8 +5,6 @@
 
 uint8_t Logger::logLevel = 6;
 
-bool Logger::logType = true;
-bool Logger::logColors = true;
 char Logger::prefix = '|';
 
 void Logger::setLogLevel(const int _logLevel) {
@@ -15,14 +13,6 @@ void Logger::setLogLevel(const int _logLevel) {
 
 void Logger::setPrefix(const char _prefix) {
 	prefix = _prefix;
-}
-
-void Logger::showType(bool show) {
-	logType = show;
-}
-
-void Logger::showColor(bool show) {
-	logColors = show;
 }
 
 void Logger::printColored(const char* str, size_t length, const uint8_t level) {
@@ -85,8 +75,7 @@ void Logger::debug(const char* fmt, ...) {
 		std::vsnprintf(str, strLen + 1, fmt, args);
 		va_end(args);
 		
-		if (logType)
-			fputs("[debug] " , stdout);
+		fputs("[debug] " , stdout);
 
 		printColored(str, strLen, 3);
 	
@@ -107,8 +96,7 @@ void Logger::log(const char* fmt, ...) {
 		std::vsnprintf(str, strLen + 1, fmt, args);
 		va_end(args);
 		
-		if (logType)
-			fputs("[log] " , stdout);
+		fputs("[log] " , stdout);
 
 		printColored(str, strLen, 2);
 	
@@ -129,8 +117,7 @@ void Logger::warn(const char* fmt, ...) {
 		std::vsnprintf(str, strLen + 1, fmt, args);
 		va_end(args);
 		
-		if (logType)
-			fputs("[warn] " , stdout);
+		fputs("[warn] " , stdout);
 
 		printColored(str, strLen, 1);
 	
