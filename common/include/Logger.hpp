@@ -39,7 +39,7 @@ public:
 
 	static void print(const char* str, logType type, const char* fmt, ...);
 
-	#define error(...)	print(__FUNCTION__, logType::ERROR, __VA_ARGS__)
+	#define error(...) print(__FUNCTION__, logType::ERROR, __VA_ARGS__)
 	#define warn(...) print(__FUNCTION__, logType::WARN, __VA_ARGS__)
 	#define log(...) print(__FUNCTION__, logType::LOG, __VA_ARGS__)
 	#define debug(...) print(__FUNCTION__, logType::DEBUG, __VA_ARGS__)
