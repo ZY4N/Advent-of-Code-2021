@@ -57,7 +57,9 @@ void util::test(const std::vector<challengeFunction>& challenges, const std::vec
 	const std::vector<std::string> test = loadStrings("testInput.txt");
 	const std::vector<std::string> input = loadStrings("input.txt");
 
+	
 	for (size_t i = 0; i < challenges.size(); i++) {
+
 		Logger::log("|Y--------------------\n");
 		int64_t testOutput = challenges[i](test);
 		if (testSolutions.size() > i) {
