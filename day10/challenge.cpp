@@ -2,6 +2,7 @@
 #include <Logger.hpp>
 #include <string>
 #include <stack>
+#include <ranges>
 
 int64_t fistChallenge(const std::vector<std::string>& lines) {
 	char openingSymboles[] { '(', '[', '{', '<' };
@@ -57,7 +58,8 @@ int64_t secondChallenge(const std::vector<std::string>& lines) {
 		}
 	}
 
-	std::sort(scores.begin(), scores.end());
+	auto it = scores.begin() + scores.size() / 2;
+	std::nth_element(scores.begin(), it, scores.end());
 	return scores[scores.size() / 2];
 }
 
