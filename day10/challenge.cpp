@@ -60,7 +60,7 @@ int64_t secondChallenge(const std::vector<std::string>& lines) {
 
 	auto it = scores.begin() + scores.size() / 2;
 	std::nth_element(scores.begin(), it, scores.end());
-	return scores[scores.size() / 2];
+	return *it;
 }
 
 int main() {
