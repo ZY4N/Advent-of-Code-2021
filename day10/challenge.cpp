@@ -4,13 +4,13 @@
 #include <stack>
 #include <ranges>
 
+static const constexpr char openingSymboles[] { '(', '[', '{', '<' };
+static const constexpr char closingSymboles[] { ')', ']', '}', '>' };
+
 int64_t fistChallenge(const std::vector<std::string>& lines) {
-	char openingSymboles[] { '(', '[', '{', '<' };
-	char closingSymboles[] { ')', ']', '}', '>' };
 	uint32_t errorScore[] { 3, 57, 1197, 25137 };
 
 	uint32_t totalScore = 0;
-
 	for (const auto& line : lines) {
 		std::stack<char> openChunks;
 		for (char c : line) {
@@ -30,10 +30,8 @@ int64_t fistChallenge(const std::vector<std::string>& lines) {
 }
 
 int64_t secondChallenge(const std::vector<std::string>& lines) {
-	char openingSymboles[] { '(', '[', '{', '<' };
-	char closingSymboles[] { ')', ']', '}', '>' };
-	std::vector<uint64_t> scores;
 
+	std::vector<uint64_t> scores;
 	for (const auto& line : lines) {
 		std::stack<char> openChunks;
 		bool corrupted = false;
