@@ -41,36 +41,11 @@ public:
 		return s;
 	}
 
-	std::vector<std::vector<uint32_t>> findAllPaths1() {
-		return findAllPaths1({}, startState);
+	std::vector<std::vector<uint32_t>> findAllPaths(bool visitTwice) {
+		return findAllPaths({}, startState, visitTwice);
 	}
 
-	std::vector<std::vector<uint32_t>> findAllPaths2() {
-		return findAllPaths2({}, startState);
-	}
-
-	std::vector<std::vector<uint32_t>> findAllPaths1(const std::vector<uint32_t>& pathSoFar, uint32_t currentState) {
-		if (!states[currentState] && std::find(pathSoFar.begin(), pathSoFar.end(), currentState) != pathSoFar.end()) 
-			return {};
-
-		auto totalPath = pathSoFar;
-		totalPath.push_back(currentState);
-		
-		if (currentState == endState) {
-			return { totalPath };
-		} else {
-			std::vector<std::vector<uint32_t>> allPaths;
-			for (const auto& transition : transitions) {
-				if (transition.first == currentState) {
-					const auto newPaths = findAllPaths1(totalPath, transition.second);
-					allPaths.insert(allPaths.end(), newPaths.begin(), newPaths.end());
-				}
-			}
-			return allPaths;
-		}
-	}
-
-	std::vector<std::vector<uint32_t>> findAllPaths2(const std::vector<uint32_t>& pathSoFar, uint32_t currentState, bool visitTwice = true) {
+	std::vector<std::vector<uint32_t>> findAllPaths(const std::vector<uint32_t>& pathSoFar, uint32_t currentState, bool visitTwice) {
 		if (!states[currentState]) {
 			uint32_t count = std::count(pathSoFar.begin(), pathSoFar.end(), currentState);
 			if (
@@ -90,9 +65,9 @@ public:
 			return { totalPath };
 		} else {
 			std::vector<std::vector<uint32_t>> allPaths;
-			for (const auto& transition : transitions) {
-				if (transition.first == currentState) {
-					const auto newPaths = findAllPaths2(totalPath, transition.second, visitTwice);
+			for (const auto [from, to] : transitions) {
+				if (from == currentState) {
+					const auto newPaths = findAllPaths(totalPath, to, visitTwice);
 					allPaths.insert(allPaths.end(), newPaths.begin(), newPaths.end());
 				}
 			}
@@ -102,11 +77,11 @@ public:
 };
 
 int64_t fistChallenge(const std::vector<std::string>& lines) {
-	return StateMachine::parse(lines).findAllPaths1().size();
+	return StateMachine::parse(lines).findAllPaths(false).size();
 }
 
 int64_t secondChallenge(const std::vector<std::string>& lines) {
-	return StateMachine::parse(lines).findAllPaths2().size();
+	return StateMachine::parse(lines).findAllPaths(true).size();
 }
 
 int main() {
