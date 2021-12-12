@@ -48,10 +48,7 @@ public:
 	std::vector<std::vector<uint32_t>> findAllPaths(const std::vector<uint32_t>& pathSoFar, uint32_t currentState, bool visitTwice) {
 		if (!states[currentState]) {
 			uint32_t count = std::count(pathSoFar.begin(), pathSoFar.end(), currentState);
-			if (
-				(currentState == startState && count > 0) ||
-				count > visitTwice
-			) {
+			if (currentState == startState && count > 0 || count > visitTwice) {
 				return {};
 			} else if (visitTwice && count == 1) {
 				visitTwice = false;
