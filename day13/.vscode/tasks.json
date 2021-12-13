@@ -6,7 +6,6 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-std=gnu++20",
-                "-Ofast",
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",

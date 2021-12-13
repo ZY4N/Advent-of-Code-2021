@@ -39,10 +39,9 @@ public:
 
 	static void print(const char* str, logType type, const char* fmt, ...);
 
-	#define error(...) print(__FUNCTION__, logType::ERROR, __VA_ARGS__)
-	#define warn(...) print(__FUNCTION__, logType::WARN, __VA_ARGS__)
-	#define log(...) print(__FUNCTION__, logType::LOG, __VA_ARGS__)
-	#define debug(...) print(__FUNCTION__, logType::DEBUG, __VA_ARGS__)
-	#define info(...) print(__FUNCTION__, logType::INFO, __VA_ARGS__)
-
+	#define e(...) print(__FUNCTION__, logType::ERROR, __VA_ARGS__)
+	#define w(...) print(__FUNCTION__, logType::WARN, __VA_ARGS__)
+	#define l(...) print(__FUNCTION__, logType::LOG, __VA_ARGS__)
+	#define d(...) print(__FUNCTION__, logType::DEBUG, __VA_ARGS__)
+	#define i(...) print(__FUNCTION__, logType::INFO, __VA_ARGS__)
 };

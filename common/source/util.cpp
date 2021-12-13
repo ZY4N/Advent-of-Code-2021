@@ -60,20 +60,20 @@ void util::test(const std::vector<challengeFunction>& challenges, const std::vec
 	
 	for (size_t i = 0; i < challenges.size(); i++) {
 
-		Logger::log("|Y--------------------\n");
+		Logger::l("|Y--------------------\n");
 		int64_t testOutput = challenges[i](test);
 		if (testSolutions.size() > i) {
-			Logger::log("test %s (%d)\n", (testOutput == testSolutions[i] ? "|Gpassed" : "|Rfailed"), testOutput);
+			Logger::l("test %s (%d)\n", (testOutput == testSolutions[i] ? "|Gpassed" : "|Rfailed"), testOutput);
 		} else {
-			Logger::log("test-output: %lld\n", testOutput);
+			Logger::l("test-output: %lld\n", testOutput);
 		}
 
 		const auto start = std::chrono::high_resolution_clock::now();
 		int64_t output = challenges[i](input);
 		const auto end = std::chrono::high_resolution_clock::now();
 		
-		Logger::log("real-output: |P%lld\n", output);
-		Logger::log("Time: |B%lldns\n", (end - start).count());
+		Logger::l("real-output: |P%lld\n", output);
+		Logger::l("Time: |B%lldns\n", (end - start).count());
 	}
-	Logger::log("|Y--------------------\n");
+	Logger::l("|Y--------------------\n");
 }

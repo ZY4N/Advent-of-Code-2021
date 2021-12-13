@@ -2,6 +2,7 @@
 
 #include <stdarg.h>
 
+
 logType Logger::logLevel = logType::DEBUG;
 
 char Logger::prefix = '|';
