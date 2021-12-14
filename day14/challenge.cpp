@@ -4,6 +4,125 @@
 #include <cstring>
 #include <unordered_map>
 
+struct QuantativeStateMachine {
+	std::vector<char> states;
+	std::vector<std::pair<uint32_t, uint32_t>> transitions;
+	std::unordered_map<std::string, uint32_t> nameToState;
+	uint64_t letterCounts[26];
+	uint64_t* stateCounts = nullptr;
+	
+	QuantativeStateMachine() {
+		std::memset(letterCounts, 0, sizeof(letterCounts));
+	}
+
+	~QuantativeStateMachine() {
+		delete[] stateCounts;
+	}
+
+	uint32_t addState(const std::string& name, char c) {
+		const auto it = nameToState.find(name);
+		if (it == nameToState.end()) {
+			uint32_t index = states.size();
+			states.push_back(c);
+			nameToState.insert({ name, index });
+			return index;
+		}
+		return it->second;
+	}
+
+	void addTransition(uint32_t from, const char* to) {
+		if (const auto it = nameToState.find(to); it != nameToState.end()) {
+			transitions.emplace_back(from, it->second);
+		}
+	}
+
+	void performSteps(uint32_t numSteps) {
+		size_t numStates = states.size();
+		uint64_t* tmp = new uint64_t[numStates];
+	
+		for (size_t i = 0; i < numSteps; i++) {
+			std::memset(tmp, 0, numStates * sizeof(uint64_t));
+			uint32_t prevState= -1;
+			for (const auto [from, to] : transitions) {
+				tmp[to] += stateCounts[from];
+				if (prevState != from) {
+					letterCounts[states[from] - 'A'] += stateCounts[from];
+					prevState = from;
+				}
+			}
+			std::memcpy(stateCounts, tmp, numStates * sizeof(uint64_t));
+		}
+
+		delete[] tmp;
+	}
+
+	static QuantativeStateMachine fromText(const std::vector<std::string>& lines) {
+		std::string templateLine = lines[0];
+
+		QuantativeStateMachine s;
+		for (size_t i = 2; i< lines.size(); i++) {
+			s.addState(lines[i].substr(0, 2), lines[i][6]);
+		}
+
+		for (const auto [name, index] : s.nameToState) {
+			const char a[]{ name[0], s.states[index], 0 };
+			const char b[]{ s.states[index], name[1], 0 };
+			s.addTransition(index, a);
+			s.addTransition(index, b);
+		}
+
+		for (char c : templateLine)
+			s.letterCounts[c - 'A']++;
+
+		size_t numStates = s.states.size();
+		s.stateCounts = new uint64_t[numStates];
+		std::memset(s.stateCounts, 0, numStates * sizeof(uint64_t));
+
+		for (size_t i = 1; i < templateLine.length(); i++) {
+			const char name[]{ templateLine[i - 1], templateLine[i], 0 };
+			if (auto it = s.nameToState.find(name); it != s.nameToState.end()) {
+				s.stateCounts[it->second]++;
+			}
+		}
+
+		std::sort(s.transitions.begin(), s.transitions.end(), [](const auto& a, const auto& b){
+			return a.first < b.first;
+		});
+		return s;
+	}
+};
+
+std::pair<uint64_t, uint64_t> findMinMax(uint64_t* it, const uint64_t* end) {
+	uint64_t min = UINT64_MAX, max = 0; 
+	while (it != end) {
+		if (*it != 0)
+			min = std::min(min, *it );
+		max = std::max(max, *it );
+		it++;
+	}
+	return { min, max };
+}
+
+int64_t fistChallenge(const std::vector<std::string>& lines) {
+	QuantativeStateMachine s = QuantativeStateMachine::fromText(lines);
+	s.performSteps(10);
+	const auto [min, max] = findMinMax(s.letterCounts, std::end(s.letterCounts));
+	return max - min;
+}
+
+int64_t secondChallenge(const std::vector<std::string>& lines) {
+	QuantativeStateMachine s = QuantativeStateMachine::fromText(lines);
+	s.performSteps(40);
+	const auto [min, max] = findMinMax(s.letterCounts, std::end(s.letterCounts));
+	return max - min;
+}
+
+int main() {
+	util::test({ fistChallenge, secondChallenge }, { 1588, 2188189693529 });
+}
+
+
+/* naive approach
 struct replacement {
 	size_t pos;
 	char c;
@@ -60,101 +179,4 @@ int64_t fistChallenge(const std::vector<std::string>& lines) {
 	while (*start == 0) start++;
 	return *(end - 1) - (*start);
 }
-
-
-//this i a mess i will clean it up later
-struct StateMachine {
-	std::vector<char> states;
-	std::vector<std::pair<uint32_t, uint32_t>> transitions;
-	uint32_t startState, endState;
-	std::unordered_map<std::string, uint32_t> nameToState;
-
-	uint32_t addState(const std::string& name, char c) {
-		const auto it = nameToState.find(name);
-		if (it == nameToState.end()) {
-			uint32_t index = states.size();
-			states.push_back(c);
-			nameToState.insert({ name, index });
-			return index;
-		}
-		return it->second;
-	}
-};
-
-int64_t secondChallenge(const std::vector<std::string>& lines) {
-	std::string templateLine = lines[0];
-
-	StateMachine s;
-	for (size_t i = 2; i< lines.size(); i++) {
-		s.addState(lines[i].substr(0, 2), lines[i][6]);
-	}
-
-	for (const auto [name, index] : s.nameToState) {
-		const char a[]{ name[0], s.states[index], 0 };
-		const char b[]{ s.states[index], name[1], 0 };
-		const auto it1 = s.nameToState.find(a);
-		const auto it2 = s.nameToState.find(b);
-		if (it1 != s.nameToState.end())
-			s.transitions.emplace_back(index, it1->second);
-		if (it2 != s.nameToState.end())
-			s.transitions.emplace_back(index, it2->second);
-	}
-
-	size_t numStates = s.states.size();
-	uint64_t* stateCounts = new uint64_t[numStates];
-	std::memset(stateCounts, 0, numStates * sizeof(uint64_t));
-
-	uint64_t charCounts[26];
-	std::memset(charCounts, 0, sizeof(charCounts));
-
-	for (char c : templateLine) {
-		charCounts[c - 'A']++;
-	}
-
-	for (size_t i = 1; i < templateLine.length(); i++) {
-		const char name[]{ templateLine[i - 1], templateLine[i], 0 };
-		if (auto it = s.nameToState.find(name); it != s.nameToState.end()) {
-			stateCounts[it->second]++;
-		}
-	}
-
-	std::sort(s.transitions.begin(), s.transitions.end(), [](const auto& a, const auto& b){
-		return a.first < b.first;
-	});
-
-	uint64_t* tmp = new uint64_t[numStates];
-	
-	for (size_t i = 0; i < 40; i++) {
-		std::memset(tmp, 0, numStates * sizeof(uint64_t));
-		uint32_t prevState= -1;
-		for (const auto [from, to] : s.transitions) {
-			tmp[to] += stateCounts[from];
-			if (prevState != from) {
-				charCounts[s.states[from] - 'A'] += stateCounts[from];
-				prevState = from;
-			}
-		}
-		std::memcpy(stateCounts, tmp, numStates * sizeof(uint64_t));
-	}
-
-	uint64_t min = UINT64_MAX, max = 0; 
-
-	for (size_t i = 0; i < 26; i++) {
-		if (charCounts[i] != 0)
-			min = std::min(min, charCounts[i]);
-		max = std::max(max, charCounts[i]);
-	}
-
-	delete[] stateCounts;
-	delete[] tmp;
-
-	return max - min;
-}
-
-int main() {
-	util::test({ fistChallenge, secondChallenge }, { 1588, 2188189693529 });
-}
-
-
-//2297181831
-//2188189693529
+*/
